@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "information")
+@Table(name = "person_information")
 public class PersonalInformation extends AbstractEntity {
 
     @Column(name = "first_name", nullable = false, length = 64)

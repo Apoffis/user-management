@@ -20,7 +20,7 @@ public class UserIdentity extends AbstractEntity {
     @Column(name = "email", length = 64, nullable = false, unique = true)
     private String email;
 
-    @Column(name = "phone_number", length = 64, nullable = false, unique = true)
+    @Column(name = "phone_number", length = 128, nullable = false, unique = true)
     private String phoneNumber;
 
     protected UserIdentity() {

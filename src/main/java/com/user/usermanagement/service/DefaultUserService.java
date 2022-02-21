@@ -48,7 +48,7 @@ public class DefaultUserService implements UserService {
                         parameter.getPersonalInformation().getGender(),
                         parameter.getPersonalInformation().getBirthDate(),
                         parameter.getPersonalInformation().getAddress())
-                );
+        );
 
         return userRepository.save(user).getId();
     }

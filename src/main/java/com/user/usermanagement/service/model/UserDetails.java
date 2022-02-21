@@ -42,6 +42,10 @@ public class UserDetails {
         return identity;
     }
 
+    public PersonalInformation getPersonalInformation() {
+        return personalInformation;
+    }
+
     public LocalDateTime getCreatedOn() {
         return createdOn;
     }

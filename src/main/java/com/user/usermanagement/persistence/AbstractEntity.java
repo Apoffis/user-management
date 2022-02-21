@@ -20,10 +20,12 @@ public abstract class AbstractEntity {
         super();
     }
 
+    @PrePersist
     public void onCreate() {
         this.createdOn = LocalDateTime.now();
     }
 
+    @PreUpdate
     public void onUpdate() {
         this.updatedOn = LocalDateTime.now();
     }
