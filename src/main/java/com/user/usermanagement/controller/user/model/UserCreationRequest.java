@@ -2,47 +2,51 @@ package com.user.usermanagement.controller.user.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.user.usermanagement.persistence.user.UserType;
-import com.user.usermanagement.persistence.user.profile.PersonalInformation;
-import com.user.usermanagement.persistence.user.profile.UserIdentity;
 
-import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 public class UserCreationRequest {
 
+    @NotNull
     @JsonProperty("type")
-    private UserType userType;
+    private UserType type;
 
-    @JsonProperty("identity_id")
-    private UserIdentity userIdentity;
+    @Valid
+    @NotNull
+    @JsonProperty("identity")
+    private UserIdentityDto identity;
 
-    @JsonProperty("personal_information_id")
-    private PersonalInformation personalInformation;
+    @Valid
+    @NotNull
+    @JsonProperty("personalInformation")
+    private PersonalInformationDto personalInformation;
 
     public UserCreationRequest() {
         super();
     }
 
-    public UserType getUserType() {
-        return userType;
+    public UserType getType() {
+        return type;
     }
 
-    public void setUserType(UserType userType) {
-        this.userType = userType;
+    public void setType(UserType type) {
+        this.type = type;
     }
 
-    public UserIdentity getUserIdentity() {
-        return userIdentity;
+    public UserIdentityDto getIdentity() {
+        return identity;
     }
 
-    public void setUserIdentity(UserIdentity userIdentity) {
-        this.userIdentity = userIdentity;
+    public void setIdentity(UserIdentityDto identity) {
+        this.identity = identity;
     }
 
-    public PersonalInformation getPersonalInformation() {
+    public PersonalInformationDto getPersonalInformation() {
         return personalInformation;
     }
 
-    public void setPersonalInformation(PersonalInformation personalInformation) {
+    public void setPersonalInformation(PersonalInformationDto personalInformation) {
         this.personalInformation = personalInformation;
     }
 }

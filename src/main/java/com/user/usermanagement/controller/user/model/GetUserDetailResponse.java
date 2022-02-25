@@ -1,21 +1,22 @@
 package com.user.usermanagement.controller.user.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.user.usermanagement.controller.AbstractResponse;
 
 public class GetUserDetailResponse extends AbstractResponse {
 
-    private UserDetailsDto userDetailsDto;
+    @JsonProperty("details")
+    private UserDetailsDto details;
 
-    public GetUserDetailResponse() {
-        super();
+    public GetUserDetailResponse(String message) {
+        super(message);
     }
 
-    public UserDetailsDto getUserDetailsDto() {
-        return userDetailsDto;
+    public GetUserDetailResponse(UserDetailsDto details) {
+        this.details = details;
     }
 
-    public void setUserDetailsDto(UserDetailsDto userDetailsDto) {
-        this.userDetailsDto = userDetailsDto;
+    public UserDetailsDto getDetails() {
+        return details;
     }
-
 }

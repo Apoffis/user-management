@@ -8,16 +8,15 @@ public class UserCreationResponse extends AbstractResponse {
     @JsonProperty("id")
     private Long id;
 
-    public UserCreationResponse() {
-        super();
+    public UserCreationResponse(Long id) {
+        this.id = id;
+    }
+
+    public UserCreationResponse(String message) {
+        super(message);
     }
 
     public Long getId() {
         return id;
     }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
 }

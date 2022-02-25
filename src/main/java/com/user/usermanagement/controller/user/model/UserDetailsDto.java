@@ -1,83 +1,66 @@
 package com.user.usermanagement.controller.user.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.user.usermanagement.controller.AbstractResponse;
 import com.user.usermanagement.persistence.user.UserType;
-import com.user.usermanagement.persistence.user.profile.PersonalInformation;
-import com.user.usermanagement.persistence.user.profile.UserIdentity;
+import com.user.usermanagement.service.model.UserDetails;
 
 import java.time.LocalDateTime;
 
-public class UserDetailsDto extends AbstractResponse {
+public class UserDetailsDto {
 
     @JsonProperty("id")
-    private Long id;
+    private final Long id;
 
     @JsonProperty("type")
-    private UserType type;
+    private final UserType type;
 
     @JsonProperty("identity")
-    private UserIdentity identity;
+    private final UserIdentityDto identity;
 
-    @JsonProperty("personal_information")
-    private PersonalInformation personalInformation;
+    @JsonProperty("personalInformation")
+    private final PersonalInformationDto personalInformation;
 
-    @JsonProperty("created_on")
-    private LocalDateTime createdOn;
+    @JsonProperty("createdOn")
+    private final LocalDateTime createdOn;
 
-    @JsonProperty("updated_on")
-    private LocalDateTime updatedOn;
+    @JsonProperty("updatedOn")
+    private final LocalDateTime updatedOn;
 
-    public UserDetailsDto() {
-        super();
+    public UserDetailsDto(final UserDetails details) {
+        this.id = details.getId();
+        this.type = details.getType();
+        this.identity = new UserIdentityDto(
+                details.getIdentity().getEmail(),
+                details.getIdentity().getPhone()
+        );
+        this.personalInformation = new PersonalInformationDto(
+
+        );
+        this.createdOn = details.getCreatedOn();
+        this.updatedOn = details.getUpdatedOn();
     }
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public UserType getType() {
         return type;
     }
 
-    public void setType(UserType type) {
-        this.type = type;
-    }
-
-    public UserIdentity getIdentity() {
+    public UserIdentityDto getIdentity() {
         return identity;
     }
 
-    public void setIdentity(UserIdentity identity) {
-        this.identity = identity;
-    }
-
-    public PersonalInformation getPersonalInformation() {
+    public PersonalInformationDto getPersonalInformation() {
         return personalInformation;
-    }
-
-    public void setPersonalInformation(PersonalInformation personalInformation) {
-        this.personalInformation = personalInformation;
     }
 
     public LocalDateTime getCreatedOn() {
         return createdOn;
     }
 
-    public void setCreatedOn(LocalDateTime createdOn) {
-        this.createdOn = createdOn;
-    }
-
     public LocalDateTime getUpdatedOn() {
         return updatedOn;
     }
-
-    public void setUpdatedOn(LocalDateTime updatedOn) {
-        this.updatedOn = updatedOn;
-    }
-
 }
