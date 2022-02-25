@@ -5,7 +5,7 @@ import org.springframework.util.Assert;
 
 import java.time.LocalDate;
 
-public class PersonalPersistentInformation {
+public class PersonalInformation {
 
     private final String firstName;
 
@@ -17,13 +17,12 @@ public class PersonalPersistentInformation {
 
     private final String address;
 
-    public PersonalPersistentInformation(String firstName, String lastName, Gender gender, LocalDate birthDate, String address) {
-
-        Assert.hasText(firstName, "Input first name!");
-        Assert.hasText(lastName, "Input last name!");
-        Assert.notNull(gender, "Select the gender!");
-        Assert.notNull(birthDate, "input the birth date!");
-        Assert.hasText(address, "input the address!");
+    public PersonalInformation(String firstName, String lastName, Gender gender, LocalDate birthDate, String address) {
+        Assert.hasText(firstName, "Null or empty text was passed as an argument for parameter 'firstName'.");
+        Assert.hasText(lastName, "Null or empty text was passed as an argument for parameter 'lastName'.");
+        Assert.notNull(gender, "Null was passed as an argument for parameter 'gender'.");
+        Assert.notNull(birthDate, "Null was passed as an argument for parameter 'birthDate'.");
+        Assert.hasText(address, "Null or empty text was passed as an argument for parameter 'address'.");
 
         this.firstName = firstName;
         this.lastName = lastName;

@@ -2,8 +2,6 @@ package com.user.usermanagement.service.model;
 
 import com.user.usermanagement.persistence.user.User;
 import com.user.usermanagement.persistence.user.UserType;
-import com.user.usermanagement.persistence.user.profile.PersonalInformation;
-import com.user.usermanagement.persistence.user.profile.UserIdentity;
 
 import java.time.LocalDateTime;
 
@@ -24,8 +22,17 @@ public class UserDetails {
     public UserDetails(final User user) {
         this.id = user.getId();
         this.type = user.getType();
-        this.identity = user.getIdentity();
-        this.personalInformation = user.getPersonalInformation();
+        this.identity = new UserIdentity(
+                user.getIdentity().getEmail(),
+                user.getIdentity().getPhone()
+        );
+        this.personalInformation = new PersonalInformation(
+                user.getPersonalInformation().getFirstName(),
+                user.getPersonalInformation().getLastName(),
+                user.getPersonalInformation().getGender(),
+                user.getPersonalInformation().getBirthDate(),
+                user.getPersonalInformation().getAddress()
+        );
         this.createdOn = user.getCreatedOn();
         this.updatedOn = user.getUpdatedOn();
     }
@@ -52,16 +59,5 @@ public class UserDetails {
 
     public LocalDateTime getUpdatedOn() {
         return updatedOn;
-    }
-
-    @Override
-    public String toString() {
-        return "UserDetails{" +
-                "id=" + id +
-                ", type=" + type +
-                ", identity=" + identity +
-                ", createdOn=" + createdOn +
-                ", updatedOn=" + updatedOn +
-                '}';
     }
 }
