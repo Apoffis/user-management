@@ -8,6 +8,15 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "users")
+@NamedEntityGraphs(
+        @NamedEntityGraph(
+                name = "user.details",
+                attributeNodes = {
+                        @NamedAttributeNode(value = "identity"),
+                        @NamedAttributeNode(value = "personalInformation")
+                }
+        )
+)
 public class User extends AbstractEntity {
 
     @Column(name = "type")

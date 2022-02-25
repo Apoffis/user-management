@@ -7,9 +7,11 @@ import java.util.Optional;
 
 public interface UserService {
 
-    Optional<UserDetails> findById(Long id);
-
     UserDetails getById(Long id);
 
+    Optional<UserDetails> findById(Long id);
+
     Long create(UserCreationParameter parameter);
+
+    Optional<UserDetails> findByIdentity(String identity);
 }

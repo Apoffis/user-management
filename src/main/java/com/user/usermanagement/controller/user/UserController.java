@@ -7,6 +7,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RequestMapping(
         value = "/users",
         produces = MediaType.APPLICATION_JSON_VALUE,
@@ -14,10 +16,12 @@ import org.springframework.web.bind.annotation.*;
 )
 public interface UserController {
 
-    @PostMapping("/")
-    ResponseEntity<UserCreationResponse> create(@RequestBody UserCreationRequest request);
-
     @GetMapping(value = "/{id}")
-    ResponseEntity<GetUserDetailResponse> get(@PathVariable("id") Long id);
+    ResponseEntity<GetUserDetailResponse> getDetailsById(@PathVariable("id") Long id);
 
+    @GetMapping(value = "/details/{identity}")
+    ResponseEntity<GetUserDetailResponse> getDetails(@PathVariable("identity") String identity);
+
+    @PostMapping("/")
+    ResponseEntity<UserCreationResponse> create(@Valid @RequestBody UserCreationRequest request);
 }

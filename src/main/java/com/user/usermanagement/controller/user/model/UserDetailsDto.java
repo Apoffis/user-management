@@ -34,7 +34,11 @@ public class UserDetailsDto {
                 details.getIdentity().getPhone()
         );
         this.personalInformation = new PersonalInformationDto(
-
+                details.getPersonalInformation().getFirstName(),
+                details.getPersonalInformation().getLastName(),
+                details.getPersonalInformation().getGender(),
+                details.getPersonalInformation().getBirthDate(),
+                details.getPersonalInformation().getAddress()
         );
         this.createdOn = details.getCreatedOn();
         this.updatedOn = details.getUpdatedOn();

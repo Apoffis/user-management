@@ -2,54 +2,73 @@ package com.user.usermanagement.service;
 
 import com.user.usermanagement.exception.UserNotFoundException;
 import com.user.usermanagement.persistence.user.User;
-import com.user.usermanagement.persistence.user.profile.PersonalInformation;
-import com.user.usermanagement.persistence.user.profile.UserIdentity;
+import com.user.usermanagement.persistence.user.profile.PersistentPersonalInformation;
+import com.user.usermanagement.persistence.user.profile.PersistentUserIdentity;
+import com.user.usermanagement.persistence.user.repository.UserIdentityRepository;
 import com.user.usermanagement.persistence.user.repository.UserRepository;
 import com.user.usermanagement.service.model.UserCreationParameter;
 import com.user.usermanagement.service.model.UserDetails;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.util.Optional;
 
 @Service
-public class DefaultUserService implements UserService {
+class DefaultUserService implements UserService {
 
     private final UserRepository userRepository;
 
-    @Autowired
-    DefaultUserService(final UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private final UserIdentityRepository userIdentityRepository;
 
-    @Override
-    public Optional<UserDetails> findById(Long id) {
-        Assert.notNull(id, "Id must be imputed!");
-        return userRepository.findById(id).map(UserDetails::new);
+    DefaultUserService(UserRepository userRepository, UserIdentityRepository userIdentityRepository) {
+        this.userRepository = userRepository;
+        this.userIdentityRepository = userIdentityRepository;
     }
 
     @Override
     public UserDetails getById(Long id) {
-        Assert.notNull(id, "Id must be imputed!");
-        return findById(id).orElseThrow(() -> new UserNotFoundException(id));
+        Assert.notNull(id, "Null was passed as an argument for parameter 'id'.");
+        return userRepository.findById(id).map(UserDetails::new)
+                .orElseThrow(() -> new UserNotFoundException(id));
+    }
+
+    @Override
+    public Optional<UserDetails> findById(Long id) {
+        return userRepository.findById(id).map(UserDetails::new);
+    }
+
+    @Override
+    public Optional<UserDetails> findByIdentity(String identity) {
+        Assert.hasText(identity, "Null or empty text was passed as an argument for parameter 'identity'.");
+        Optional<User> userHolder = identity.indexOf('@') > 0
+                ? userRepository.findByIdentityEmail(identity)
+                : userRepository.findByIdentityPhone(identity);
+        return userHolder.map(UserDetails::new);
     }
 
     @Override
     public Long create(UserCreationParameter parameter) {
+        Assert.notNull(parameter, "Null was passed as an argument for parameter 'parameter'.");
+        if (userIdentityRepository.existsByEmail(parameter.getIdentity().getEmail())) {
 
-        User user = new User(parameter.getType(),
-                new UserIdentity(
-                        parameter.getUserIdentity().getEmail(),
-                        parameter.getUserIdentity().getPhoneNumber()),
-                new PersonalInformation(
+        }
+        if (userIdentityRepository.existsByPhone(parameter.getIdentity().getPhone())) {
+
+        }
+        User user = new User(
+                parameter.getType(),
+                new PersistentUserIdentity(
+                        parameter.getIdentity().getEmail(),
+                        parameter.getIdentity().getPhone()
+                ),
+                new PersistentPersonalInformation(
                         parameter.getPersonalInformation().getFirstName(),
                         parameter.getPersonalInformation().getLastName(),
                         parameter.getPersonalInformation().getGender(),
                         parameter.getPersonalInformation().getBirthDate(),
-                        parameter.getPersonalInformation().getAddress())
+                        parameter.getPersonalInformation().getAddress()
+                )
         );
-
         return userRepository.save(user).getId();
     }
 }

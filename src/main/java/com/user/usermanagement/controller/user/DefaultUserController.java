@@ -6,14 +6,15 @@ import com.user.usermanagement.controller.user.model.UserCreationResponse;
 import com.user.usermanagement.controller.user.model.UserDetailsDto;
 import com.user.usermanagement.exception.UserAlreadyException;
 import com.user.usermanagement.service.UserService;
-import com.user.usermanagement.service.model.PersonalPersistentInformation;
+import com.user.usermanagement.service.model.PersonalInformation;
 import com.user.usermanagement.service.model.UserCreationParameter;
-import com.user.usermanagement.service.model.UserDetails;
-import com.user.usermanagement.service.model.UserPersistentIdentity;
+import com.user.usermanagement.service.model.UserIdentity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 
+@Validated
 @RestController
 public class DefaultUserController implements UserController {
 
@@ -25,14 +26,13 @@ public class DefaultUserController implements UserController {
 
     @Override
     public ResponseEntity<UserCreationResponse> create(UserCreationRequest request) {
-
         final UserCreationParameter creationParameter = new UserCreationParameter(
-                request.getUserType(),
-                new UserPersistentIdentity(
-                        request.getUserIdentity().getEmail(),
-                        request.getUserIdentity().getPhoneNumber()
+                request.getType(),
+                new UserIdentity(
+                        request.getIdentity().getEmail(),
+                        request.getIdentity().getPhone()
                 ),
-                new PersonalPersistentInformation(
+                new PersonalInformation(
                         request.getPersonalInformation().getFirstName(),
                         request.getPersonalInformation().getLastName(),
                         request.getPersonalInformation().getGender(),
@@ -40,47 +40,29 @@ public class DefaultUserController implements UserController {
                         request.getPersonalInformation().getAddress()
                 )
         );
-
-        final UserCreationResponse creationResponse = new UserCreationResponse();
-
         try {
-            creationResponse.setId(userService.create(creationParameter));
-            return ResponseEntity.ok(creationResponse);
+            return ResponseEntity.ok(new UserCreationResponse(userService.create(creationParameter)));
         } catch (UserAlreadyException ex) {
-            creationResponse.setMessage(ex.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(creationResponse);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new UserCreationResponse(ex.getMessage()));
         }
     }
 
     @Override
-    public ResponseEntity<GetUserDetailResponse> get(Long id) {
+    public ResponseEntity<GetUserDetailResponse> getDetailsById(Long id) {
 
-        final GetUserDetailResponse detailResponse = new GetUserDetailResponse();
-
-        try {
-            UserDetails details = userService.getById(id);
-
-            UserDetailsDto userDetailsDto = toDto(details);
-
-            detailResponse.setUserDetailsDto(userDetailsDto);
-            return ResponseEntity.ok(detailResponse);
-
-        } catch (UserAlreadyException ex) {
-            detailResponse.setMessage(ex.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(detailResponse);
-        }
-
+        return userService.findById(id)
+                .map(UserDetailsDto::new)
+                .map(GetUserDetailResponse::new)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    private UserDetailsDto toDto(UserDetails details) {
-        UserDetailsDto userDetailsDto = new UserDetailsDto();
-
-        userDetailsDto.setId(details.getId());
-        userDetailsDto.setType(details.getType());
-        userDetailsDto.setPersonalInformation(details.getPersonalInformation());
-        userDetailsDto.setCreatedOn(details.getCreatedOn());
-        userDetailsDto.setUpdatedOn(details.getUpdatedOn());
-        return userDetailsDto;
+    @Override
+    public ResponseEntity<GetUserDetailResponse> getDetails(String identity) {
+        return userService.findByIdentity(identity)
+                .map(UserDetailsDto::new)
+                .map(GetUserDetailResponse::new)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
-
 }

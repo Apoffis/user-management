@@ -9,13 +9,15 @@ public abstract class AbstractResponse {
     @JsonProperty("error_msg")
     private String message;
 
-    public AbstractResponse() { super(); }
+    public AbstractResponse() {
+        super();
+    }
+
+    public AbstractResponse(String message) {
+        this.message = message;
+    }
 
     public String getMessage() {
         return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 }
