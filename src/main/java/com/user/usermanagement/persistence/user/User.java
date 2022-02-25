@@ -1,8 +1,8 @@
 package com.user.usermanagement.persistence.user;
 
 import com.user.usermanagement.persistence.AbstractEntity;
-import com.user.usermanagement.persistence.user.profile.PersonalInformation;
-import com.user.usermanagement.persistence.user.profile.UserIdentity;
+import com.user.usermanagement.persistence.user.profile.PersistentPersonalInformation;
+import com.user.usermanagement.persistence.user.profile.PersistentUserIdentity;
 
 import javax.persistence.*;
 
@@ -14,29 +14,29 @@ public class User extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     private UserType type;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(
             name = "identity_id",
             referencedColumnName = "id",
-            nullable = false, updatable = false,
+            nullable = false, updatable = false, unique = true,
             foreignKey = @ForeignKey(name = "FK_users_identity_id")
     )
-    private UserIdentity identity;
+    private PersistentUserIdentity identity;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(
             name = "personal_information_id",
             referencedColumnName = "id",
-            nullable = false, updatable = false,
+            nullable = false, updatable = false, unique = true,
             foreignKey = @ForeignKey(name = "FK_users_personal_information_id")
     )
-    private PersonalInformation personalInformation;
+    private PersistentPersonalInformation personalInformation;
 
     protected User() {
         super();
     }
 
-    public User(UserType type, UserIdentity identity, PersonalInformation personalInformation) {
+    public User(UserType type, PersistentUserIdentity identity, PersistentPersonalInformation personalInformation) {
         this.type = type;
         this.identity = identity;
         this.personalInformation = personalInformation;
@@ -46,11 +46,11 @@ public class User extends AbstractEntity {
         return type;
     }
 
-    public UserIdentity getIdentity() {
+    public PersistentUserIdentity getIdentity() {
         return identity;
     }
 
-    public PersonalInformation getPersonalInformation() {
+    public PersistentPersonalInformation getPersonalInformation() {
         return personalInformation;
     }
 }

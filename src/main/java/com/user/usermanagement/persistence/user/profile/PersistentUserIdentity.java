@@ -12,31 +12,31 @@ import javax.persistence.UniqueConstraint;
         name = "user_identity",
         uniqueConstraints = {
                 @UniqueConstraint(name = "UQ_user_identity_email", columnNames = "email"),
-                @UniqueConstraint(name = "UQ_user_identity_phone_number", columnNames = "phone_number")
+                @UniqueConstraint(name = "UQ_user_identity_phone", columnNames = "phone")
         }
 )
-public class UserIdentity extends AbstractEntity {
+public class PersistentUserIdentity extends AbstractEntity {
 
     @Column(name = "email", length = 64, nullable = false, unique = true)
     private String email;
 
-    @Column(name = "phone_number", length = 128, nullable = false, unique = true)
-    private String phoneNumber;
+    @Column(name = "phone", length = 64, nullable = false, unique = true)
+    private String phone;
 
-    protected UserIdentity() {
+    protected PersistentUserIdentity() {
         super();
     }
 
-    public UserIdentity(String email, String phoneNumber) {
+    public PersistentUserIdentity(String email, String phone) {
         this.email = email;
-        this.phoneNumber = phoneNumber;
+        this.phone = phone;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getPhone() {
+        return phone;
     }
 }

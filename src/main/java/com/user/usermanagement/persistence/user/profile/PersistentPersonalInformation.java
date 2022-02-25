@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "person_information")
-public class PersonalInformation extends AbstractEntity {
+public class PersistentPersonalInformation extends AbstractEntity {
 
     @Column(name = "first_name", nullable = false, length = 64)
     private String firstName;
@@ -25,11 +25,11 @@ public class PersonalInformation extends AbstractEntity {
     @Column(name = "address", nullable = false, length = 128)
     private String address;
 
-    protected PersonalInformation() {
+    protected PersistentPersonalInformation() {
         super();
     }
 
-    public PersonalInformation(String firstName, String lastName, Gender gender, LocalDate birthDate, String address) {
+    public PersistentPersonalInformation(String firstName, String lastName, Gender gender, LocalDate birthDate, String address) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
