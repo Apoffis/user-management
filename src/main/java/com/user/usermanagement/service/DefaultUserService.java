@@ -8,19 +8,29 @@ import com.user.usermanagement.persistence.user.repository.UserIdentityRepositor
 import com.user.usermanagement.persistence.user.repository.UserRepository;
 import com.user.usermanagement.service.model.UserCreationParameter;
 import com.user.usermanagement.service.model.UserDetails;
+import com.user.usermanagement.service.model.UserSearchParameter;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.awt.print.Pageable;
+import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.stream.Collectors;
 
 @Service
 class DefaultUserService implements UserService {
+
+    private final Executor executor;
 
     private final UserRepository userRepository;
 
     private final UserIdentityRepository userIdentityRepository;
 
-    DefaultUserService(UserRepository userRepository, UserIdentityRepository userIdentityRepository) {
+    DefaultUserService(Executor executor, UserRepository userRepository, UserIdentityRepository userIdentityRepository) {
+        this.executor = executor;
         this.userRepository = userRepository;
         this.userIdentityRepository = userIdentityRepository;
     }
@@ -35,6 +45,22 @@ class DefaultUserService implements UserService {
     @Override
     public Optional<UserDetails> findById(Long id) {
         return userRepository.findById(id).map(UserDetails::new);
+    }
+
+    @Override
+    public List<UserDetails> findAll() {
+        return userRepository.findAll().stream().map(UserDetails::new).collect(Collectors.toList());
+    }
+
+    @Override
+    public CompletableFuture<List<UserDetails>> findAllPageable(UserSearchParameter parameter) {
+        final PageRequest pageRequest = PageRequest.of(parameter.getPage(), parameter.getSize());
+        return CompletableFuture.supplyAsync(() ->
+            userRepository.findAll(parameter.getTerm(), (Pageable) pageRequest)
+                    .stream()
+                    .map(UserDetails::new)
+                    .collect(Collectors.toUnmodifiableList()), executor
+        );
     }
 
     @Override

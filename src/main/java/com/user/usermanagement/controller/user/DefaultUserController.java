@@ -14,6 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Validated
 @RestController
 public class DefaultUserController implements UserController {
@@ -55,6 +58,14 @@ public class DefaultUserController implements UserController {
                 .map(GetUserDetailResponse::new)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @Override
+    public List<GetUserDetailResponse> getAll() {
+        return userService.findAll().stream()
+                .map(UserDetailsDto::new)
+                .map(GetUserDetailResponse::new)
+                .collect(Collectors.toList());
     }
 
     @Override

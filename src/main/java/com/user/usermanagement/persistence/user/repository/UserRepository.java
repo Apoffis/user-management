@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 
+import java.awt.print.Pageable;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -17,6 +19,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @EntityGraph("user.details")
     Optional<User> findByIdentityEmail(String email);
+
+    @EntityGraph("user.details")
+    List<User> findAll(String term, Pageable pageable);
 
     @EntityGraph("user.details")
     Optional<User> findByIdentityPhone(String phone);

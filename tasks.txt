@@ -1,0 +1,44 @@
+JPA տանը կարդալ
+hibernet (orm) (object relational maping)
+տարբեր օբեկտներ սարքել էս օրինակի վրա
+
+version control
+dependensy infection
+singltone կարդալ
+prototype
+double chack պացատրել
+
+dependensyc tree
+
+@transactional
+
+proxy patern
+AOP infect
+CG link
+proxy
+dynamik proxy
+
+bean scope
+
+crteria crteria query,
+
+bean lazy, eager
+
+3 tired
+n tired
+onion
+hexagonal (port adaptor)
+
+spreeng boom
+soap
+tomcat
+
+
+sql vs nosql
+
+servlet
+servlet container vs application server
+tomcat
+tomcat thread pool
+webapps
+

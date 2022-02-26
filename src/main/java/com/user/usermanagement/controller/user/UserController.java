@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RequestMapping(
         value = "/users",
@@ -18,6 +19,9 @@ public interface UserController {
 
     @GetMapping(value = "/{id}")
     ResponseEntity<GetUserDetailResponse> getDetailsById(@PathVariable("id") Long id);
+
+    @GetMapping(value = "/all")
+    List<GetUserDetailResponse> getAll();
 
     @GetMapping(value = "/details/{identity}")
     ResponseEntity<GetUserDetailResponse> getDetails(@PathVariable("identity") String identity);
