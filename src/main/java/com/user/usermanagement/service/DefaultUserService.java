@@ -4,19 +4,18 @@ import com.user.usermanagement.exception.UserNotFoundException;
 import com.user.usermanagement.persistence.user.User;
 import com.user.usermanagement.persistence.user.profile.PersistentPersonalInformation;
 import com.user.usermanagement.persistence.user.profile.PersistentUserIdentity;
+import com.user.usermanagement.persistence.user.profile.UserFullName;
+import com.user.usermanagement.persistence.user.repository.PersonalInformationRepository;
 import com.user.usermanagement.persistence.user.repository.UserIdentityRepository;
 import com.user.usermanagement.persistence.user.repository.UserRepository;
 import com.user.usermanagement.service.model.UserCreationParameter;
 import com.user.usermanagement.service.model.UserDetails;
-import com.user.usermanagement.service.model.UserSearchParameter;
-import org.springframework.data.domain.PageRequest;
+import com.user.usermanagement.service.model.UserIdentity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
@@ -29,10 +28,13 @@ class DefaultUserService implements UserService {
 
     private final UserIdentityRepository userIdentityRepository;
 
-    DefaultUserService(Executor executor, UserRepository userRepository, UserIdentityRepository userIdentityRepository) {
+    private final PersonalInformationRepository personalInformationRepository;
+
+    DefaultUserService(Executor executor, UserRepository userRepository, UserIdentityRepository userIdentityRepository, PersonalInformationRepository personalInformationRepository) {
         this.executor = executor;
         this.userRepository = userRepository;
         this.userIdentityRepository = userIdentityRepository;
+        this.personalInformationRepository = personalInformationRepository;
     }
 
     @Override
@@ -53,14 +55,25 @@ class DefaultUserService implements UserService {
     }
 
     @Override
-    public CompletableFuture<List<UserDetails>> findAllPageable(UserSearchParameter parameter) {
-        final PageRequest pageRequest = PageRequest.of(parameter.getPage(), parameter.getSize());
-        return CompletableFuture.supplyAsync(() ->
-            userRepository.findAll(parameter.getTerm(), (Pageable) pageRequest)
-                    .stream()
-                    .map(UserDetails::new)
-                    .collect(Collectors.toUnmodifiableList()), executor
+    public void changeEmail(Long id, String email) {
+        Assert.notNull(id, "Null was passed as an argument for parameter 'id'.");
+        Assert.hasText(email, "Null or empty text was passed as an argument for parameter 'email'.");
+
+        userIdentityRepository.findByUserId(id).ifPresentOrElse(identity -> {
+                    if (userIdentityRepository.existsByEmail(email)) {
+                        throw new IllegalArgumentException(email + " is not exists!");
+                    }
+                    userIdentityRepository.save(identity.changeEmail(email));
+                },
+                () -> {
+                    throw new UserNotFoundException(id);
+                }
         );
+    }
+
+    @Override
+    public Optional<UserFullName> getUserFullName(Long id) {
+        return personalInformationRepository.getFullName(id);
     }
 
     @Override

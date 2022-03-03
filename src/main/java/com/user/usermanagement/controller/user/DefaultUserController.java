@@ -1,10 +1,8 @@
 package com.user.usermanagement.controller.user;
 
-import com.user.usermanagement.controller.user.model.GetUserDetailResponse;
-import com.user.usermanagement.controller.user.model.UserCreationRequest;
-import com.user.usermanagement.controller.user.model.UserCreationResponse;
-import com.user.usermanagement.controller.user.model.UserDetailsDto;
+import com.user.usermanagement.controller.user.model.*;
 import com.user.usermanagement.exception.UserAlreadyException;
+import com.user.usermanagement.persistence.user.profile.UserFullName;
 import com.user.usermanagement.service.UserService;
 import com.user.usermanagement.service.model.PersonalInformation;
 import com.user.usermanagement.service.model.UserCreationParameter;
@@ -51,11 +49,25 @@ public class DefaultUserController implements UserController {
     }
 
     @Override
+    public ResponseEntity<UserCreationResponse> changeEmail(Long id, String email) {
+        return null;
+    }
+
+    @Override
     public ResponseEntity<GetUserDetailResponse> getDetailsById(Long id) {
 
         return userService.findById(id)
                 .map(UserDetailsDto::new)
                 .map(GetUserDetailResponse::new)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @Override
+    public ResponseEntity<GetUserFullNameResponse> getFullNameById(Long id) {
+        return userService.getUserFullName(id)
+                .map(UserFullNameDto::new)
+                .map(GetUserFullNameResponse::new)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }

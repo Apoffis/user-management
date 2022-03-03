@@ -1,12 +1,11 @@
 package com.user.usermanagement.service;
 
+import com.user.usermanagement.persistence.user.profile.UserFullName;
 import com.user.usermanagement.service.model.UserCreationParameter;
 import com.user.usermanagement.service.model.UserDetails;
-import com.user.usermanagement.service.model.UserSearchParameter;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 
 public interface UserService {
 
@@ -16,7 +15,9 @@ public interface UserService {
 
     List<UserDetails> findAll();
 
-    CompletableFuture<List<UserDetails>> findAllPageable(UserSearchParameter parameter);
+    void changeEmail(Long id, String email);
+
+    Optional<UserFullName> getUserFullName(Long id);
 
     Long create(UserCreationParameter parameter);
 

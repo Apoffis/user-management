@@ -1,6 +1,7 @@
 package com.user.usermanagement.controller.user;
 
 import com.user.usermanagement.controller.user.model.GetUserDetailResponse;
+import com.user.usermanagement.controller.user.model.GetUserFullNameResponse;
 import com.user.usermanagement.controller.user.model.UserCreationRequest;
 import com.user.usermanagement.controller.user.model.UserCreationResponse;
 import org.springframework.http.MediaType;
@@ -20,6 +21,9 @@ public interface UserController {
     @GetMapping(value = "/{id}")
     ResponseEntity<GetUserDetailResponse> getDetailsById(@PathVariable("id") Long id);
 
+    @GetMapping(value = "/name/{id}")
+    ResponseEntity<GetUserFullNameResponse> getFullNameById(@PathVariable("id") Long id);
+
     @GetMapping(value = "/all")
     List<GetUserDetailResponse> getAll();
 
@@ -28,4 +32,8 @@ public interface UserController {
 
     @PostMapping("/")
     ResponseEntity<UserCreationResponse> create(@Valid @RequestBody UserCreationRequest request);
+
+    @PostMapping("/update/{id}")
+    ResponseEntity<UserCreationResponse> changeEmail(@PathVariable("id") Long id, @Valid @PathVariable("email") String email);
+
 }

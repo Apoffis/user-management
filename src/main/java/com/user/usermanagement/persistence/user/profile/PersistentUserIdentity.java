@@ -39,4 +39,14 @@ public class PersistentUserIdentity extends AbstractEntity {
     public String getPhone() {
         return phone;
     }
+
+    public PersistentUserIdentity changeEmail(String email) {
+        this.email = email;
+        return this;
+    }
+
+    public PersistentUserIdentity changePhone(String phone) {
+        this.phone = phone;
+        return this;
+    }
 }
