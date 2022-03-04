@@ -56,4 +56,24 @@ public class PersistentPersonalInformation extends AbstractEntity {
     public String getAddress() {
         return address;
     }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 }

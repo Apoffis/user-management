@@ -18,7 +18,7 @@ public interface UserIdentityRepository extends JpaRepository<PersistentUserIden
     @Query(
             value = "from PersistentUserIdentity identity " +
                     "inner join User u on u.identity.id = identity.id  " +
-                    "where u.id =: userId"
+                    "where u.id = :userId"
     )
     Optional<PersistentUserIdentity> findByUserId(@Param("userId") Long userId);
 }
