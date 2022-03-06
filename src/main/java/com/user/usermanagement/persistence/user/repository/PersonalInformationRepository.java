@@ -17,4 +17,11 @@ public interface PersonalInformationRepository extends JpaRepository<PersistentP
                     "from PersistentPersonalInformation info inner join User u on u.personalInformation.id = info.id where u.id = :userId"
     )
     Optional<UserFullName> getFullName(@Param("userId") Long userId);
+
+    @Query(
+            value = "from PersistentPersonalInformation information " +
+                    "inner join User u on u.personalInformation.id = information.id " +
+                    "where u.id = :userId"
+    )
+    Optional<PersistentPersonalInformation> findByUserId(@Param("userId") Long userId);
 }

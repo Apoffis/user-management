@@ -2,7 +2,6 @@ package com.user.usermanagement.controller.user;
 
 import com.user.usermanagement.controller.user.model.*;
 import com.user.usermanagement.exception.UserAlreadyException;
-import com.user.usermanagement.persistence.user.profile.UserFullName;
 import com.user.usermanagement.service.UserService;
 import com.user.usermanagement.service.model.PersonalInformation;
 import com.user.usermanagement.service.model.UserCreationParameter;
@@ -49,8 +48,38 @@ public class DefaultUserController implements UserController {
     }
 
     @Override
-    public ResponseEntity<UserCreationResponse> changeEmail(Long id, String email) {
-        return null;
+    public void changeEmail(Long id, String email) {
+        userService.changeEmail(id, email);
+    }
+
+    @Override
+    public void changePhone(Long id, String phone) {
+        userService.changePhone(id, phone);
+    }
+
+    @Override
+    public void deleteUser(Long id) {
+        userService.deleteById(id);
+    }
+
+    @Override
+    public void changeUser(Long id, PersonalInformationRequest request) {
+
+        System.out.println(request.getFirstName());
+        System.out.println(request.getLastName());
+        System.out.println(request.getGender());
+        System.out.println(request.getBirthDate());
+        System.out.println(request.getAddress());
+
+        userService.changePersonalInformation(id,
+                new PersonalInformation(
+                        request.getFirstName(),
+                        request.getLastName(),
+                        request.getGender(),
+                        request.getBirthDate(),
+                        request.getAddress()
+                )
+        );
     }
 
     @Override
