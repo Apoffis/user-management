@@ -42,3 +42,20 @@ tomcat
 tomcat thread pool
 webapps
 
+
+optimistic u pesemisting locking
+
+db isolate levels
+acid transaction
+
+cuncurent hashmap
+
+Compitoble future
+
+trhead steak , stack frame
+
+garbeag collaction
+
+մաթեմատիկական գրաֆիկա
+
+gc root
